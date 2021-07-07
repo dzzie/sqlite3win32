@@ -2,7 +2,7 @@
 #define SQLITE_STDCALL __stdcall
 #define SQLITE_WIN32_MALLOC 1
 #define SQLITE_WIN32_HEAP_CREATE 1
-#define SQLITE_THREADSAFE 2
+#define SQLITE_THREADSAFE 1
 // #define SQLITE_USE_URI 1
 #define SQLITE_SOUNDEX 1
 #define SQLITE_OMIT_DEPRECATED 1
@@ -24,6 +24,8 @@ SQLITE_API void SQLITE_STDCALL sqlite3_win32_sleep(DWORD milliseconds);
 SQLITE_API char *SQLITE_STDCALL sqlite3_win32_utf8_to_mbcs(const char *zFilename);
 SQLITE_API char *SQLITE_STDCALL sqlite3_win32_mbcs_to_utf8(const char *zFilename);
 SQLITE_API void SQLITE_STDCALL sqlite3_win32_write_debug(const char *zBuf, int nBuf);
+SQLITE_API void SQLITE_STDCALL sqlite3_regexp_init(sqlite3 *db, char **pzErrMsg, const sqlite3_api_routines *pApi);
+SQLITE_API void SQLITE_STDCALL sqlite3_concat_init(sqlite3 *db, char **pzErrMsg, const sqlite3_api_routines *pApi);
 
 #define MODULE sqlite3win32stubs
 
@@ -100,12 +102,14 @@ class MODULE
     DECLFUNC(create_collation16)
     DECLFUNC(create_collation)
     DECLFUNC(create_collation_v2)
+    DECLFUNC(create_filename)
     DECLFUNC(create_function16)
     DECLFUNC(create_function)
     DECLFUNC(create_function_v2)
     DECLFUNC(create_module)
     DECLFUNC(create_module_v2)
     DECLFUNC(create_window_function)
+    DECLFUNC(database_file_object)
     DECLFUNC(data_count)
     DECLFUNC(db_cacheflush)
     DECLFUNC(db_filename)
@@ -133,6 +137,7 @@ class MODULE
     DECLFUNC(filename_wal)
     DECLFUNC(finalize)
     DECLFUNC(free)
+    DECLFUNC(free_filename)
     DECLFUNC(free_table)
     DECLFUNC(get_autocommit)
     DECLFUNC(get_auxdata)
@@ -239,6 +244,7 @@ class MODULE
     DECLFUNC(threadsafe)
     DECLFUNC(total_changes)
     DECLFUNC(trace_v2)
+    DECLFUNC(txn_state)
     DECLFUNC(update_hook)
     DECLFUNC(uri_boolean)
     DECLFUNC(uri_int64)
@@ -283,6 +289,8 @@ class MODULE
     DECLFUNC(win32_sleep)
     DECLFUNC(win32_utf8_to_mbcs)
     DECLFUNC(win32_write_debug)
+    DECLFUNC(regexp_init)
+    DECLFUNC(concat_init)
 };
 
 DEFFUNC(aggregate_context)
@@ -353,12 +361,14 @@ DEFFUNC(context_db_handle)
 DEFFUNC(create_collation16)
 DEFFUNC(create_collation)
 DEFFUNC(create_collation_v2)
+DEFFUNC(create_filename)
 DEFFUNC(create_function16)
 DEFFUNC(create_function)
 DEFFUNC(create_function_v2)
 DEFFUNC(create_module)
 DEFFUNC(create_module_v2)
 DEFFUNC(create_window_function)
+DEFFUNC(database_file_object)
 DEFFUNC(data_count)
 DEFFUNC(db_cacheflush)
 DEFFUNC(db_filename)
@@ -386,6 +396,7 @@ DEFFUNC(filename_journal)
 DEFFUNC(filename_wal)
 DEFFUNC(finalize)
 DEFFUNC(free)
+DEFFUNC(free_filename)
 DEFFUNC(free_table)
 DEFFUNC(get_autocommit)
 DEFFUNC(get_auxdata)
@@ -492,6 +503,7 @@ DEFFUNC(table_column_metadata)
 DEFFUNC(threadsafe)
 DEFFUNC(total_changes)
 DEFFUNC(trace_v2)
+DEFFUNC(txn_state)
 DEFFUNC(update_hook)
 DEFFUNC(uri_boolean)
 DEFFUNC(uri_int64)
@@ -536,3 +548,5 @@ DEFFUNC(win32_set_directory16)
 DEFFUNC(win32_sleep)
 DEFFUNC(win32_utf8_to_mbcs)
 DEFFUNC(win32_write_debug)
+DEFFUNC(regexp_init)
+DEFFUNC(concat_init)
